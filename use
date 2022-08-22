@@ -1,0 +1,58 @@
+<?php
+                if(isset($_GET['page']) && $_GET['page'] == 'trending_food_display'){
+            ?>
+                <div class="display-container">
+                    <h1>Food Table</h1>
+                    <?php if(isset($_SESSION['msg'])){ 
+                                echo $_SESSION['msg'];
+                                unset($_SESSION['msg']);
+                            } 
+                    ?>
+                    <?php if(isset($_SESSION['imageTypeErr'])){ 
+                                echo $_SESSION['imageTypeErr'];
+                                unset($_SESSION['imageTypeErr']);
+                            } 
+                    ?>
+                    <?php if(isset($_SESSION['imageSizeErr'])){ 
+                                echo $_SESSION['imageSizeErr'];
+                                unset($_SESSION['imageSizeErr']);
+                            } 
+                    ?>
+                    <p><a href="dashboard.php?page=food"> &larr;</a></p>
+                    <div class="food-table">
+                        <table>
+                            <tr>
+                                <th># ID</th>
+                                <th>Food Name</th>
+                                <th>Food Trend</th>
+                            </tr>
+                            <?php
+                                $i = 1;
+                                
+                                
+                                $select = mysqli_query($db, "SELECT * FROM food_table");
+                    
+                            
+                                $selected = mysqli_fetch_array($select);
+                                foreach($select as $selected){
+                            ?>
+                            <tr>
+                                <td><?php echo $i++; ?></td>
+                                <td><?php echo $selected['food_name'];?></td>
+                                <td>
+                                    <?php
+                                        $get = mysqli_query($db, "SELECT * FROM order_list WHERE food_id = '{$selected['id']}'");
+                                        $num = mysqli_num_rows($get);
+                                        echo $num;
+                                    ?>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                            ?>
+                        </table>
+                    </div>
+                </div>
+            <?php
+                    }
+            ?>

@@ -1,0 +1,54 @@
+<?php
+include_once("connection.php");
+if(isset($_GET['page']) && $_GET['page'] != ""){
+	$page = $_GET['page'];
+	}else{
+		$page = 1;
+		}
+?>
+<!Doctype html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<title>Pagination</title>
+	</head>
+	<body>
+		<div class="tab">
+			<table>
+				<tr>
+					<th>User ID</th>
+					<th>User Email</th>
+				</tr>
+				<?php
+				$select_count = mysqli_query($db, "SELECT * FROM paginationtb");
+				$num_of_persons = mysqli_num_rows($select_count);
+					$num_of_persons_per_page = 4;
+					$num_of_pages = ceil($num_of_persons/$num_of_persons_per_page);
+					$offset = ($page - 1)*$num_of_pages;
+				
+					$select = mysqli_query($db, "SELECT * FROM paginationtb LIMIT $offset, $num_of_persons_per_page");
+					$selected = mysqli_fetch_assoc($select);
+					foreach($select as $selected){
+						?>
+						<tr>
+							<td><?php echo $selected['id'];?></td>
+							<td><?php echo $selected['email'];?></td>
+						</tr>
+				<?php
+						}
+				?>
+			</table>
+		</div>
+		<div class="links">
+		<?php
+		for($page = 1; $page <= $num_of_pages; $page++){
+			?>
+			<a href='index.php?page=<?php echo $page?>' class="active"><?php echo $page ?></a>
+			<?php
+			}
+			?>
+		</div>
+	<body>
+</html>
